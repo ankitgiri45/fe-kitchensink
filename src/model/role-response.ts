@@ -1,5 +1,5 @@
 export interface RoleResponse {
-    id: string;
-    name: string;
-    allowedUrls: string[]
+  id: string;
+  name: string;
+  allowedUrls: string[];
 }
