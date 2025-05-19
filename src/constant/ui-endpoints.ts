@@ -1,6 +1,6 @@
 export const UI_ENDPOINTS = {
     LOGIN: '/login',
-    DASHBOARD: '/dashboard',
+    HOME: '/',
     USER_MANAGEMENT: '/user-management',
     USER_PROFILE: '/user-profile',
     SETTINGS: '/settings',

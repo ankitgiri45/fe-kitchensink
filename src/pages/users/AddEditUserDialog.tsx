@@ -8,6 +8,7 @@ import type {RoleResponse} from "../../model/role-response.ts";
 
 interface AddUserDialogProps {
     open: boolean;
+    title: string;
     onClose: () => void;
     isLoading: boolean;
     user?: UserResponse;
@@ -29,6 +30,7 @@ interface FormDataType {
 
 const AddEditUserDialog: React.FC<AddUserDialogProps> = ({
                                                              open,
+                                                             title,
                                                              onClose,
                                                              onSubmit,
                                                              isLoading,
@@ -36,7 +38,7 @@ const AddEditUserDialog: React.FC<AddUserDialogProps> = ({
                                                              roles,
                                                              isRoleLoading
                                                          }) => {
-    const isEdit = !!user;
+    const isEditing = !!user;
     const defaultValues = {
         id: '',
         email: '',
@@ -65,7 +67,7 @@ const AddEditUserDialog: React.FC<AddUserDialogProps> = ({
     useEffect(() => {
         if (!open) {
             // TODO: Reset the form when the dialog is closed
-            // reset(defaultValues);
+            reset(defaultValues);
         }
     }, [open]);
 
@@ -73,7 +75,7 @@ const AddEditUserDialog: React.FC<AddUserDialogProps> = ({
         <GDialog open={open}
                  onClose={onClose}
                  size="sm"
-                 title={`${isEdit ? "Update" : "Add"} User`}
+                 title={title}
                  dialogContent={
                      <form
                          onSubmit={handleSubmit(data => {
@@ -81,7 +83,7 @@ const AddEditUserDialog: React.FC<AddUserDialogProps> = ({
                                  ...data,
                                  roles: data.roles.map((roleId) => ({
                                      ...roles.find(role => role.id === roleId) as RoleResponse
-                                 })).filter(role => !!role),
+                                 })).filter(role => !!role && Object.keys(role).length > 0),
                              };
                              onSubmit(userData); // Only parent controls closing
                          })}
@@ -102,7 +104,7 @@ const AddEditUserDialog: React.FC<AddUserDialogProps> = ({
                                          <TextField
                                              {...field}
                                              label="Email"
-                                             disabled={isEdit}
+                                             disabled={isEditing}
                                              error={!!errors.email}
                                              helperText={errors.email?.message}
                                              fullWidth
@@ -238,7 +240,7 @@ const AddEditUserDialog: React.FC<AddUserDialogProps> = ({
                          <DialogActions>
                              <GButton onClick={onClose} color="secondary" variant="outlined" label="Cancel"/>
                              <GButton type="submit" color="primary" variant="contained"
-                                      loading={isLoading} label={isEdit ? "Update" : "Add"}/>
+                                      loading={isLoading} label={title}/>
                          </DialogActions>
                      </form>
                  }

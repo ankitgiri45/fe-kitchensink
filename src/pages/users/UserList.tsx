@@ -18,9 +18,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import GButton from "../../common/GButton.tsx";
 import {useRoles} from "../../api/roles-api.ts";
+import "./users.css"
 
 const UserList = () => {
-    const {data: users = []} = useUsers({refetchOnWindowFocus: false});
+    const {data: users = [], refetch: usersApi} = useUsers({refetchOnWindowFocus: false});
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -41,6 +42,7 @@ const UserList = () => {
 
     const {isPending: isAdding, mutate: addUserApi} = useCreateUser({
         onSuccess: () => {
+            usersApi();
             onClose();
         }, onError: () => {
         }
@@ -49,6 +51,7 @@ const UserList = () => {
 
     const {isPending: isUpdating, mutate: updateUserApi} = useUpdateUser({
         onSuccess: () => {
+            usersApi();
             onClose();
         }, onError: () => {
         }
@@ -56,6 +59,7 @@ const UserList = () => {
 
     const {isPending: isDeleting, mutate: deleteUserApi} = useDeleteUser({
         onSuccess: () => {
+            usersApi();
             onClose();
         }, onError: () => {
         }
@@ -84,8 +88,8 @@ const UserList = () => {
             </Stack>
             <Paper sx={{width: '100%', overflow: 'hidden'}}>
                 <TableContainer>
-                    <Table stickyHeader aria-label="user table">
-                        <TableHead>
+                    <Table className={"g-table"} stickyHeader aria-label="user table">
+                        <TableHead className={"g-table-header"} style={{backgroundColor: '#000000'}}>
                             <TableRow>
                                 <TableCell>Email</TableCell>
                                 <TableCell>First Name</TableCell>
@@ -141,6 +145,7 @@ const UserList = () => {
                 />
             </Paper>
             <AddEditUserDialog
+                title={updatedUser ? "Edit User" : "Add User"}
                 open={dialogOpen}
                 onClose={onClose}
                 roles={roles}

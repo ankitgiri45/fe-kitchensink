@@ -16,7 +16,7 @@ const LoginPage: React.FC = () => {
                 localStorage.setItem("token", data.token);
                 data.email = email;
                 localStorage.setItem("currentUser", JSON.stringify(data));
-                navigate(UI_ENDPOINTS.DASHBOARD, {replace: true});
+                navigate(UI_ENDPOINTS.HOME, {replace: true});
             }, onError: () => {
             }
         });
@@ -32,7 +32,7 @@ const LoginPage: React.FC = () => {
         useEffect(() => {
             const token = localStorage.getItem("token");
             if (token) {
-                navigate(UI_ENDPOINTS.DASHBOARD);
+                navigate(UI_ENDPOINTS.HOME);
             }
         }, [navigate]);
 
@@ -47,7 +47,6 @@ const LoginPage: React.FC = () => {
                 justifyContent="center"
                 alignItems="center"
                 minHeight="100vh"
-                bgcolor="#f5f5f5"
             >
                 <Paper elevation={3} sx={{padding: 4, minWidth: 320}}>
                     <Typography variant="h5" mb={2} align="center">
@@ -87,11 +86,12 @@ const LoginPage: React.FC = () => {
                     </form>
                     <Box mt={3} textAlign="center">
                         <Typography variant="body2">Don't have an account?</Typography>
-                        <Button variant="text" onClick={() => setSignupOpen(true)}>
+                        <Button variant="text" onClick={() => setSignupOpen(true)} disabled={loggingIn}>
                             Sign Up
                         </Button>
                     </Box>
                     <AddEditUserDialog
+                        title={"Sign Up"}
                         open={signupOpen}
                         onClose={onClose}
                         roles={[{

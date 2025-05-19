@@ -1,6 +1,6 @@
 import axios, {AxiosError, type AxiosError as AxiosErrorType, type AxiosResponse} from 'axios';
 import type ApiResponse from "../model/api-response.ts";
-import store, {setError} from "../store/root-store.ts";
+import store, {setError, setSuccess} from "../store/root-store.ts";
 import {UI_ENDPOINTS} from "../constant/ui-endpoints.ts";
 
 const api = axios.create({
@@ -31,6 +31,7 @@ api.interceptors.request.use(
 // Response interceptor
 api.interceptors.response.use(
     (response: AxiosResponse<ApiResponse<unknown>>) => {
+        store.dispatch(setSuccess(response.data));
         return response;
     },
     (error: AxiosErrorType<ApiResponse<unknown>>) => {
@@ -42,6 +43,7 @@ api.interceptors.response.use(
                 message: error.message,
                 data: null,
             };
+            store.dispatch(setError(data));
         } else if (error.status === 403) {
             console.error('Unauthorized');
             data = {
@@ -49,13 +51,13 @@ api.interceptors.response.use(
                 message: "You are not authorized to access this resource",
                 data: null,
             }
-            // localStorage.clear();
+            //TODO localStorage.clear();
             // window.location.replace(UI_ENDPOINTS.LOGIN);
-
         } else {
             data = error.response?.data as ApiResponse<unknown>;
         }
         store.dispatch(setError(data));
+
         return Promise.reject(error);
     }
 );

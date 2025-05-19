@@ -116,7 +116,7 @@ const HomePage = () => {
                 {drawer}
             </Drawer>
 
-            <Container sx={{mt: 4}}>
+            <Container sx={{mt: 4}} style={{maxWidth: '100%'}}>
                 {currentUser.roles.some((role) =>
                     role.toLowerCase() === "admin"
                 ) ? (
