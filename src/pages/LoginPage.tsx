@@ -6,7 +6,7 @@ import { UI_ENDPOINTS } from "../constant/ui-endpoints.ts";
 import type { LoginResponse } from "../model/login-response.ts";
 import AddEditUserDialog from "./users/AddEditUserDialog";
 import { useDefaultRoles } from "../api/roles-api.ts";
-import logo from "/kitchen-sink-logo.png";
+import logo from "/kitchen-sink-logo.webp";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -56,7 +56,7 @@ const LoginPage: React.FC = () => {
       alignItems="center"
       minHeight="100vh"
     >
-      <Paper elevation={3} sx={{ padding: 4, minWidth: 320 }}>
+      <Paper elevation={3} sx={{ padding: 4, minWidth: 500 }}>
         <Box display="flex" justifyContent="center" mb={2}>
           <Box
             component="img"

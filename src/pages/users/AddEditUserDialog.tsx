@@ -112,10 +112,12 @@ const AddEditUserDialog: React.FC<AddUserDialogProps> = ({
                 name="email"
                 control={control}
                 rules={{
-                  required: "Email is required",
+                  required:
+                    "Email must be a valid Gmail address (example@gmail.com)",
                   pattern: {
-                    value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
-                    message: "Invalid email",
+                    value: /^[a-zA-Z0-9][a-zA-Z0-9._%+-]*@gmail\.com$/,
+                    message:
+                      "Email must be a valid Gmail address (example@gmail.com)",
                   },
                 }}
                 render={({ field }) => (
@@ -138,30 +140,72 @@ const AddEditUserDialog: React.FC<AddUserDialogProps> = ({
                 <Controller
                   name="firstName"
                   control={control}
-                  rules={{ required: "First name is required" }}
+                  rules={{
+                    required: "Must be between 2 and 20 characters",
+                    minLength: {
+                      value: 8,
+                      message: "Must be between 2 and 20 characters",
+                    },
+                    maxLength: {
+                      value: 20,
+                      message: "Must be between 2 and 20 characters",
+                    },
+                  }}
                   render={({ field }) => (
                     <TextField
                       {...field}
                       label="First Name"
+                      slotProps={{
+                        htmlInput: {
+                          maxLength: 20,
+                        },
+                      }}
                       disabled={isLoading}
                       error={!!errors.firstName}
                       helperText={errors.firstName?.message}
                       fullWidth
+                      onBlur={async () => {
+                        field.onBlur(); // Trigger react-hook-form's blur handler
+                        // Trigger validation manually for this field
+                        await trigger("firstName");
+                      }}
                     />
                   )}
                 />
                 <Controller
                   name="lastName"
                   control={control}
-                  rules={{ required: "Last name is required" }}
+                  minLength={2}
+                  maxLength={20}
+                  rules={{
+                    required: "Must be between 2 and 20 characters",
+                    minLength: {
+                      value: 8,
+                      message: "Must be between 2 and 20 characters",
+                    },
+                    maxLength: {
+                      value: 20,
+                      message: "Must be between 2 and 20 characters",
+                    },
+                  }}
                   render={({ field }) => (
                     <TextField
                       {...field}
                       label="Last Name"
                       disabled={isLoading}
+                      slotProps={{
+                        htmlInput: {
+                          maxLength: 20,
+                        },
+                      }}
                       error={!!errors.lastName}
                       helperText={errors.lastName?.message}
                       fullWidth
+                      onBlur={async () => {
+                        field.onBlur(); // Trigger react-hook-form's blur handler
+                        // Trigger validation manually for this field
+                        await trigger("lastName");
+                      }}
                     />
                   )}
                 />
@@ -170,18 +214,26 @@ const AddEditUserDialog: React.FC<AddUserDialogProps> = ({
                 name="phone"
                 control={control}
                 rules={{
-                  required: "Phone is required",
+                  required:
+                    "Phone must be 10 digits and not all the same digit.",
                   pattern: {
-                    value: /^\+?\d{7,15}$/,
-                    message: "Invalid phone",
+                    value: /^(?!(\d)\1*$)\d{10}$/,
+                    message:
+                      "Phone must be 10 digits and not all the same digit.",
                   },
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
                     label="Phone"
-                    type={"number"}
                     disabled={isLoading}
+                    slotProps={{
+                      htmlInput: {
+                        maxLength: 10,
+                        inputMode: "numeric",
+                        pattern: "[0-9]*",
+                      },
+                    }}
                     error={!!errors.phone}
                     helperText={errors.phone?.message}
                     fullWidth
@@ -200,9 +252,6 @@ const AddEditUserDialog: React.FC<AddUserDialogProps> = ({
                     control={control}
                     rules={{
                       required: "Role is required",
-                      validate: (roles) =>
-                        (roles && roles.length > 0) ||
-                        "At least one role required",
                     }}
                     render={({ field }) => (
                       <TextField
@@ -239,10 +288,12 @@ const AddEditUserDialog: React.FC<AddUserDialogProps> = ({
                 name="password"
                 control={control}
                 rules={{
-                  required: "Password is required",
-                  minLength: {
-                    value: 6,
-                    message: "Password must be at least 6 characters",
+                  required:
+                    "Password must be at least 8 characters, include uppercase, lowercase, and a number",
+                  pattern: {
+                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
+                    message:
+                      "Password must be at least 8 characters, include uppercase, lowercase, and a number",
                   },
                 }}
                 render={({ field }) => (

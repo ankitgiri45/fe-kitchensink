@@ -22,7 +22,7 @@ import { UI_ENDPOINTS } from "../constant/ui-endpoints.ts";
 import UserList from "./users/UserList.tsx";
 import type { LoginResponse } from "../model/login-response.ts";
 import { useLogout } from "../api/auth-api.ts";
-import logo from "/kitchen-sink-logo.png";
+import logo from "/kitchen-sink-logo.webp";
 const UserView: React.FC<{ currentUser: LoginResponse }> = ({
   currentUser,
 }) => {
