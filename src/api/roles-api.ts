@@ -19,4 +19,20 @@ const useRoles = (
     ...options,
   });
 };
-export { useRoles };
+
+const defaultRoles = async () => {
+  const axiosResponse: AxiosResponse<ApiResponse<RoleResponse[]>> =
+    await api.get("/roles/default");
+  return axiosResponse.data.data;
+};
+
+const useDefaultRoles = (
+  options: Omit<UseQueryOptions<RoleResponse[], Error>, "queryFn" | "queryKey">,
+) => {
+  return useQuery({
+    queryKey: ["roles/default"],
+    queryFn: defaultRoles,
+    ...options,
+  });
+};
+export { useRoles, useDefaultRoles };

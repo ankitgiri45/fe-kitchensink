@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { UI_ENDPOINTS } from "../constant/ui-endpoints.ts";
 import type { LoginResponse } from "../model/login-response.ts";
 import AddEditUserDialog from "./users/AddEditUserDialog";
+import { useDefaultRoles } from "../api/roles-api.ts";
+import logo from "/kitchen-sink-logo.webp";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -20,13 +22,19 @@ const LoginPage: React.FC = () => {
     },
     onError: () => {},
   });
+
   const onClose = () => {
     setSignupOpen(false);
   };
+
   const { isPending: isAdding, mutate: registerApi } = useRegisterUser({
     onSuccess: () => {
       onClose();
     },
+  });
+
+  const { isLoading: isRolesLoading, data: roles } = useDefaultRoles({
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
@@ -49,9 +57,22 @@ const LoginPage: React.FC = () => {
       minHeight="100vh"
     >
       <Paper elevation={3} sx={{ padding: 4, minWidth: 320 }}>
-        <Typography variant="h5" mb={2} align="center">
-          Login
-        </Typography>
+        <Box display="flex" justifyContent="center" mb={2}>
+          <Box
+            component="img"
+            src={logo}
+            alt="Kitchen Sink Logo"
+            sx={{
+              height: 100,
+              width: 100,
+              borderRadius: "50%",
+              boxShadow: 3,
+              backgroundColor: "#fff",
+              p: 1,
+              objectFit: "contain",
+            }}
+          />
+        </Box>
         <form onSubmit={handleSubmit}>
           <TextField
             label="Email"
@@ -89,7 +110,8 @@ const LoginPage: React.FC = () => {
           <Button
             variant="text"
             onClick={() => setSignupOpen(true)}
-            disabled={loggingIn}
+            disabled={loggingIn || isRolesLoading}
+            loading={isRolesLoading}
           >
             Sign Up
           </Button>
@@ -98,13 +120,7 @@ const LoginPage: React.FC = () => {
           title={"Sign Up"}
           open={signupOpen}
           onClose={onClose}
-          roles={[
-            {
-              id: "6828eb8fcba512b0d1307575",
-              name: "USER",
-              allowedUrls: ["/users/me", "/perform-logout"],
-            },
-          ]}
+          roles={roles ?? []}
           isRoleLoading={false}
           isLoading={isAdding}
           onSubmit={registerApi}

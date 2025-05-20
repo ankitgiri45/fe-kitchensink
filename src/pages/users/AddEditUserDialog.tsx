@@ -97,11 +97,12 @@ const AddEditUserDialog: React.FC<AddUserDialogProps> = ({
           onSubmit={handleSubmit((data) => {
             const userData = {
               ...data,
-              roles: data.roles
+              roles: [],
+              /*roles: data.roles
                 .map((roleId) => ({
                   ...(roles.find((role) => role.id === roleId) as RoleResponse),
                 }))
-                .filter((role) => !!role && Object.keys(role).length > 0),
+                .filter((role) => !!role && Object.keys(role).length > 0),*/
             };
             onSubmit(userData); // Only parent controls closing
           })}
@@ -180,6 +181,7 @@ const AddEditUserDialog: React.FC<AddUserDialogProps> = ({
                   <TextField
                     {...field}
                     label="Phone"
+                    type={"number"}
                     disabled={isLoading}
                     error={!!errors.phone}
                     helperText={errors.phone?.message}

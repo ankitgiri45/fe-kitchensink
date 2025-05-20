@@ -14,7 +14,8 @@ const api = axios.create({
     Accept: "application/json",
   },
 });
-const noTokenRequired = ["/login"];
+
+const noTokenRequired = ["/login", "/register", "/roles/default"];
 const sessionExpiredMessage =
   "Session expired. You will be redirected to login page out in 5 sec.";
 const connectionErrorMessage =
@@ -63,15 +64,19 @@ api.interceptors.response.use(
         status: httpStatusUnauthorized,
         message: error.message,
       }) as ApiResponse<unknown>;
-      if (data.message !== sessionExpiredMessage) {
-        data.message = data.message
-          ? data.message.concat("\n", sessionExpiredMessage)
-          : sessionExpiredMessage;
+
+      if (window.location.pathname !== UI_ENDPOINTS.LOGIN) {
+        if (data.message !== sessionExpiredMessage) {
+          data.message = data.message
+            ? data.message.concat("\n", sessionExpiredMessage)
+            : sessionExpiredMessage;
+        }
+        console.log("Redirecting to login page");
+        setTimeout(() => {
+          localStorage.clear();
+          window.location.replace(UI_ENDPOINTS.LOGIN);
+        }, timeoutDuration);
       }
-      setTimeout(() => {
-        localStorage.clear();
-        window.location.replace(UI_ENDPOINTS.LOGIN);
-      }, timeoutDuration);
     } else {
       data = error.response?.data as ApiResponse<unknown>;
     }
