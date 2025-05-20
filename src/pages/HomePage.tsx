@@ -22,7 +22,7 @@ import { UI_ENDPOINTS } from "../constant/ui-endpoints.ts";
 import UserList from "./users/UserList.tsx";
 import type { LoginResponse } from "../model/login-response.ts";
 import { useLogout } from "../api/auth-api.ts";
-
+import logo from "/kitchen-sink-logo.png";
 const UserView: React.FC<{ currentUser: LoginResponse }> = ({
   currentUser,
 }) => {
@@ -37,13 +37,28 @@ const UserView: React.FC<{ currentUser: LoginResponse }> = ({
         py: 4,
       }}
     >
+      <Box
+        component="img"
+        src={logo}
+        alt="Kitchen Sink Logo"
+        sx={{
+          height: 200,
+          width: 200,
+          borderRadius: "10%",
+          boxShadow: 3,
+          backgroundColor: "#fff",
+          p: 1,
+          mb: 2,
+          objectFit: "contain",
+        }}
+      />
       <Typography variant="h4" component="h1" gutterBottom>
         Welcome, {currentUser.email}!
       </Typography>
       <Typography variant="h4" component="h2" gutterBottom>
         You're currently at role. {currentUser.roles.join(", ")}
       </Typography>
-      <Typography variant="h6" color="text.secondary" gutterBottom>
+      <Typography variant="h6" gutterBottom>
         Your personalized dashboard is currently under development
       </Typography>
       <CircularProgress size={60} />
@@ -61,7 +76,7 @@ const HomePage = () => {
     localStorage.clear();
     navigate(UI_ENDPOINTS.LOGIN, { replace: true });
   };
-  const { isPending: loggingOut, mutate: logoutApi } = useLogout({
+  const { mutate: logoutApi } = useLogout({
     onSuccess: onSuccess,
     onError: onSuccess,
   });

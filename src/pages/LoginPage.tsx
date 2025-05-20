@@ -6,7 +6,7 @@ import { UI_ENDPOINTS } from "../constant/ui-endpoints.ts";
 import type { LoginResponse } from "../model/login-response.ts";
 import AddEditUserDialog from "./users/AddEditUserDialog";
 import { useDefaultRoles } from "../api/roles-api.ts";
-import logo from "/kitchen-sink-logo.webp";
+import logo from "/kitchen-sink-logo.png";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -63,8 +63,8 @@ const LoginPage: React.FC = () => {
             src={logo}
             alt="Kitchen Sink Logo"
             sx={{
-              height: 100,
-              width: 100,
+              height: 200,
+              width: 200,
               borderRadius: "50%",
               boxShadow: 3,
               backgroundColor: "#fff",

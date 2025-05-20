@@ -48,7 +48,6 @@ const UserList = () => {
     refetchOnWindowFocus: false,
   });
 
-  const [, setAddedUser] = useState<UserResponse | null>(null);
   const [updatedUser, setUpdatedUser] = useState<UserResponse | undefined>();
 
   const { isPending: isAdding, mutate: addUserApi } = useCreateUser({
@@ -84,7 +83,6 @@ const UserList = () => {
   };
 
   const onClose = () => {
-    setAddedUser(null);
     setUpdatedUser(undefined);
     setDialogOpen(false);
   };
