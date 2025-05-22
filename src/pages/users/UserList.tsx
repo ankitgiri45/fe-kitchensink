@@ -26,7 +26,11 @@ import { useRoles } from "../../api/roles-api.ts";
 import "./users.css";
 
 const UserList = () => {
-  const { data: users = [], refetch: usersApi } = useUsers({
+  const {
+    data: users = [],
+    refetch: usersApi,
+    isFetching: isUsersLoading,
+  } = useUsers({
     refetchOnWindowFocus: false,
   });
 
@@ -50,27 +54,23 @@ const UserList = () => {
 
   const [updatedUser, setUpdatedUser] = useState<UserResponse | undefined>();
 
+  const getOnSuccess = () => {
+    if (!isUsersLoading) {
+      usersApi();
+    }
+    onClose();
+  };
+
   const { isPending: isAdding, mutate: addUserApi } = useCreateUser({
-    onSuccess: () => {
-      usersApi();
-      onClose();
-    },
+    onSuccess: getOnSuccess,
     onError: () => {},
   });
-
   const { isPending: isUpdating, mutate: updateUserApi } = useUpdateUser({
-    onSuccess: () => {
-      usersApi();
-      onClose();
-    },
+    onSuccess: getOnSuccess,
     onError: () => {},
   });
-
   const { isPending: isDeleting, mutate: deleteUserApi } = useDeleteUser({
-    onSuccess: () => {
-      usersApi();
-      onClose();
-    },
+    onSuccess: getOnSuccess,
     onError: () => {},
   });
 
@@ -152,7 +152,9 @@ const UserList = () => {
                           (role) => role.name.toLowerCase() == "admin",
                         )}
                         onClick={() => {
-                          deleteUserApi(user.id);
+                          if (!isDeleting) {
+                            deleteUserApi(user.id);
+                          }
                         }}
                         label="Delete"
                         loading={isDeleting}

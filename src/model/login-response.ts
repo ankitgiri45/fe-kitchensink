@@ -1,5 +1,10 @@
+export interface TokenResponse {
+  current: string;
+  refresh: string;
+}
+
 export interface LoginResponse {
   email: string;
-  token: string;
+  token: TokenResponse;
   roles: string[];
 }

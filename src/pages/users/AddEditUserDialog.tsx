@@ -143,7 +143,7 @@ const AddEditUserDialog: React.FC<AddUserDialogProps> = ({
                   rules={{
                     required: "Must be between 2 and 20 characters",
                     minLength: {
-                      value: 8,
+                      value: 2,
                       message: "Must be between 2 and 20 characters",
                     },
                     maxLength: {
@@ -175,12 +175,10 @@ const AddEditUserDialog: React.FC<AddUserDialogProps> = ({
                 <Controller
                   name="lastName"
                   control={control}
-                  minLength={2}
-                  maxLength={20}
                   rules={{
                     required: "Must be between 2 and 20 characters",
                     minLength: {
-                      value: 8,
+                      value: 2,
                       message: "Must be between 2 and 20 characters",
                     },
                     maxLength: {

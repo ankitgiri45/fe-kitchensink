@@ -23,6 +23,7 @@ import UserList from "./users/UserList.tsx";
 import type { LoginResponse } from "../model/login-response.ts";
 import { useLogout } from "../api/auth-api.ts";
 import logo from "/kitchen-sink-logo.webp";
+import { LOGGED_IN_USER_KEY } from "../constant/constant.ts";
 const UserView: React.FC<{ currentUser: LoginResponse }> = ({
   currentUser,
 }) => {
@@ -68,7 +69,7 @@ const UserView: React.FC<{ currentUser: LoginResponse }> = ({
 
 const HomePage = () => {
   const currentUser: LoginResponse = JSON.parse(
-    localStorage.getItem("currentUser") ?? "{}",
+    localStorage.getItem(LOGGED_IN_USER_KEY) ?? "{}",
   );
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();

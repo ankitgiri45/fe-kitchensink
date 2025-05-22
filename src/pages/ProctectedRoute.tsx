@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { UI_ENDPOINTS } from "../constant/ui-endpoints.ts";
+import { LOGIN_TOKEN_KEY } from "../constant/constant.ts";
 
 const ProtectedRoute: React.FC<{ children: React.JSX.Element }> = ({
   children,
@@ -8,7 +9,7 @@ const ProtectedRoute: React.FC<{ children: React.JSX.Element }> = ({
   const navigate = useNavigate();
 
   const loggedIn = useMemo(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem(LOGIN_TOKEN_KEY);
     if (!token) {
       localStorage.clear();
       return false;

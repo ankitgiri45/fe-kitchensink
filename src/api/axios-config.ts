@@ -6,6 +6,7 @@ import axios, {
 import type ApiResponse from "../model/api-response.ts";
 import store, { setError, setSuccess } from "../store/root-store.ts";
 import { UI_ENDPOINTS } from "../constant/ui-endpoints.ts";
+import { LOGIN_TOKEN_KEY } from "../constant/constant.ts";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -15,7 +16,12 @@ const api = axios.create({
   },
 });
 
-const noTokenRequired = ["/login", "/register", "/roles/default"];
+const noTokenRequired = [
+  "/login",
+  "/register",
+  "/roles/default",
+  "/refresh-token",
+];
 const sessionExpiredMessage =
   "Session expired. You will be redirected to login page out in 5 sec.";
 const connectionErrorMessage =
@@ -25,7 +31,7 @@ const httpStatusUnauthorized = 401;
 
 // Add this before exporting api
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem(LOGIN_TOKEN_KEY);
   if (!noTokenRequired.includes(config.url ?? "")) {
     if (token) {
       config.headers = config.headers || {};

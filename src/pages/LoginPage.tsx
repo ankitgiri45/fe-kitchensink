@@ -7,6 +7,7 @@ import type { LoginResponse } from "../model/login-response.ts";
 import AddEditUserDialog from "./users/AddEditUserDialog";
 import { useDefaultRoles } from "../api/roles-api.ts";
 import logo from "/kitchen-sink-logo.webp";
+import { LOGGED_IN_USER_KEY, LOGIN_TOKEN_KEY } from "../constant/constant.ts";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -15,9 +16,9 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const { mutate: loginApi, isPending: loggingIn } = useLogin({
     onSuccess: (data: LoginResponse) => {
-      localStorage.setItem("token", data.token);
+      localStorage.setItem(LOGIN_TOKEN_KEY, data.token.current);
       data.email = email;
-      localStorage.setItem("currentUser", JSON.stringify(data));
+      localStorage.setItem(LOGGED_IN_USER_KEY, JSON.stringify(data));
       navigate(UI_ENDPOINTS.HOME, { replace: true });
     },
     onError: () => {},
@@ -38,7 +39,7 @@ const LoginPage: React.FC = () => {
   });
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem(LOGIN_TOKEN_KEY);
     if (token) {
       navigate(UI_ENDPOINTS.HOME, { replace: true });
     }
